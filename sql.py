@@ -2,7 +2,7 @@ import sqlite3
 from sqlite3 import Error
 
 def create_connection(db_file):
-    """Tworzy połączenie z bazą danych SQLite."""
+    """połączenie z bazą danych SQLite."""
     conn = None
     try:
         conn = sqlite3.connect(db_file)
@@ -13,7 +13,7 @@ def create_connection(db_file):
     return conn
 
 def execute_sql(conn, sql):
-    """Wykonuje zapytanie SQL."""
+    """zapytanie SQL."""
     try:
         c = conn.cursor()
         c.execute(sql)
@@ -23,7 +23,6 @@ def execute_sql(conn, sql):
         print(f"Błąd: {e}")
 
 def create_tables(conn):
-    """Tworzy tabele projects i tasks."""
     sql_create_projects_table = """
         CREATE TABLE IF NOT EXISTS projects (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,7 +47,6 @@ def create_tables(conn):
     execute_sql(conn, sql_create_tasks_table)
 
 def add_project(conn, project):
-    """Dodaje nowy projekt do tabeli projects."""
     sql = '''INSERT INTO projects(nazwa, start_date, end_date) VALUES(?,?,?)'''
     try:
         cur = conn.cursor()
@@ -60,7 +58,6 @@ def add_project(conn, project):
         return None
 
 def add_task(conn, task):
-    """Dodaje nowe zadanie do tabeli tasks."""
     sql = '''INSERT INTO tasks(project_id, nazwa, opis, status, start_date, end_date) 
              VALUES(?,?,?,?,?,?)'''
     try:
@@ -73,7 +70,6 @@ def add_task(conn, task):
         return None
 
 def select_all(conn, table):
-    """Pobiera wszystkie wiersze z podanej tabeli."""
     try:
         cur = conn.cursor()
         cur.execute(f"SELECT * FROM {table}")
@@ -83,7 +79,6 @@ def select_all(conn, table):
         return []
 
 def select_where(conn, table, **query):
-    """Pobiera wiersze z tabeli na podstawie warunków."""
     try:
         cur = conn.cursor()
         qs = [f"{k}=?" for k in query]
@@ -96,7 +91,6 @@ def select_where(conn, table, **query):
         return []
 
 def update(conn, table, id, **kwargs):
-    """Aktualizuje wiersz w tabeli na podstawie ID."""
     try:
         parameters = [f"{k}=?" for k in kwargs]
         parameters = ", ".join(parameters)
@@ -110,7 +104,6 @@ def update(conn, table, id, **kwargs):
         print(f"Błąd: {e}")
 
 def delete_where(conn, table, **kwargs):
-    """Usuwa wiersze z tabeli na podstawie warunków."""
     try:
         qs = [f"{k}=?" for k in kwargs]
         q = " AND ".join(qs)
@@ -124,7 +117,6 @@ def delete_where(conn, table, **kwargs):
         print(f"Błąd: {e}")
 
 def delete_all(conn, table):
-    """Usuwa wszystkie wiersze z tabeli."""
     try:
         sql = f"DELETE FROM {table}"
         cur = conn.cursor()
